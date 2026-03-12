@@ -1,0 +1,85 @@
+###############################################
+# Visual Studio / Rider / VS Code
+###############################################
+.vs/
+.idea/
+*.sln.iml
+riderModule.iml
+/_ReSharper.Caches/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.csproj.user
+*.sln.docstates
+
+###############################################
+# Build output (Derleme Çıktıları)
+###############################################
+bin/
+obj/
+[pP]ublish/
+
+###############################################
+# NuGet & Bağımlılıklar
+###############################################
+packages/
+*.nupkg
+.nuget/
+project.lock.json
+project.assets.json
+packages.config
+
+###############################################
+# Katmanlı Mimari & Proje Dosyaları
+###############################################
+# EF Core Migration Bundle ve geçici dosyalar
+efbundle.exe
+*.exe
+*.dll
+*.pdb
+
+# Eğer Presentation katmanında bir UI framework (React/Angular) varsa
+node_modules/
+dist/
+
+###############################################
+# Logs and test results
+###############################################
+*.log
+TestResults/
+coverage/
+*.coverage
+
+###############################################
+# OS files (İşletim Sistemi Dosyaları)
+###############################################
+.DS_Store
+Thumbs.db
+desktop.ini
+
+###############################################
+# Environment / Secrets (Hassas Bilgiler)
+###############################################
+.env
+.env.*
+secrets.json
+
+# KRİTİK: Ana appsettings.json repoda kalmalı (şablon olarak), 
+# ancak geliştiriciye özel ayarlar dışlanmalıdır.
+appsettings.Development.json
+appsettings.Local.json
+
+###############################################
+# Veritabanı Dosyaları
+###############################################
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+###############################################
+# Diğer
+###############################################
+*.vsix
