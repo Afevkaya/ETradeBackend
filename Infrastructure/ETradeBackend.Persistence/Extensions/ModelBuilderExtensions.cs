@@ -8,12 +8,12 @@ public static class ModelBuilderExtensions
     {
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {
-            entity.SetTableName(entity.GetTableName()?.ToLower());
-            entity.SetSchema(entity.GetSchema()?.ToLower());
+            entity.SetTableName(entity.GetTableName()?.ToLowerInvariant());
+            entity.SetSchema(entity.GetSchema()?.ToLowerInvariant());
 
             foreach (var property in entity.GetProperties())
             {
-                property.SetColumnName(property.GetColumnName().ToLower());
+                property.SetColumnName(property.GetColumnName().ToLowerInvariant());
             }
         }
     }

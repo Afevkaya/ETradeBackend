@@ -1,6 +1,8 @@
-﻿namespace ETradeBackend.API.Extensions;
+﻿using ETradeBackend.API.Filters;
 
-public static class ServiceRegistration
+namespace ETradeBackend.API.Extensions;
+
+public static class ServiceRegistrationExtension
 {
     public static IServiceCollection AddPresentation(this IServiceCollection services)
     {

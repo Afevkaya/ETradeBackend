@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ETradeBackend.Persistence.Extensions;
 
-public static class ServiceRegistration
+public static class ServiceRegistrationExtension
 {
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {

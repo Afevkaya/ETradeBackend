@@ -1,15 +1,22 @@
 using ETradeBackend.API.Extensions;
+using ETradeBackend.API.Filters;
+using ETradeBackend.Application.Extensions;
 using ETradeBackend.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+}).ConfigureApiBehaviorOptions(options =>options.SuppressModelStateInvalidFilter = true);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services
     .AddPersistence(builder.Configuration)
-    .AddPresentation();
+    .AddPresentation()
+    .AddApplication();
 
 var app = builder.Build();
 

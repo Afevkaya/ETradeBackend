@@ -10,6 +10,7 @@ public class WriteRepository<T>(ETradeDbContext eTradeDbContext) : IWriteReposit
     public DbSet<T> Table { get; } = eTradeDbContext.Set<T>();
     public async Task<T> AddAsync(T entity)
     {
+        entity.Id = Guid.NewGuid();
         var result =  await Table.AddAsync(entity);
         return result.Entity;
     }
