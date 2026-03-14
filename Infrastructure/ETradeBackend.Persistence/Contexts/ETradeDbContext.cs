@@ -17,9 +17,9 @@ public class ETradeDbContext(DbContextOptions<ETradeDbContext> options) : DbCont
         base.OnModelCreating(modelBuilder);
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
         this.UpdateBaseEntityTimestamps();
-        return base.SaveChangesAsync(cancellationToken);
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }

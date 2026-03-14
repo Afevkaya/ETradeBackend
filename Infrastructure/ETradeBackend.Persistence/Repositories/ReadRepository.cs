@@ -9,8 +9,30 @@ namespace ETradeBackend.Persistence.Repositories;
 public class ReadRepository<T>(ETradeDbContext eTradeDbContext) : IReadRepository<T> where T : BaseEntity
 {
     public DbSet<T> Table { get; } = eTradeDbContext.Set<T>();
-    public IQueryable<T> GetAll() => Table.AsQueryable();
-    public IQueryable<T> GetWhere(Expression<Func<T, bool>> predicate) => Table.Where(predicate);
-    public async Task<T> GetSingleWhereAsync(Expression<Func<T, bool>> predicate) => await Table.SingleOrDefaultAsync(predicate);
-    public async Task<T> GetByIdAsync(Guid id) => await Table.FindAsync(id);
+
+    private IQueryable<T> GetQueryable() => Table.AsQueryable().Where(x=>x.IsDeleted == false);
+    public IQueryable<T> GetAll(bool tracking = true)
+    {
+        var query = GetQueryable();
+        if (!tracking) query.AsNoTracking();
+        return query;
+    }
+    public IQueryable<T> GetWhere(Expression<Func<T, bool>> predicate, bool tracking = true) 
+    {
+        var query = GetQueryable().Where(predicate);
+       if (!tracking) query.AsNoTracking();
+       return query;
+    }
+    public async Task<T> GetSingleWhereAsync(Expression<Func<T, bool>> predicate, bool tracking = true)
+    {
+        var query = GetQueryable();
+        if (!tracking) query.AsNoTracking();
+        return await query.FirstOrDefaultAsync(predicate);
+    }
+    public async Task<T> GetByIdAsync(Guid id, bool tracking = true)
+    {
+        var query = GetQueryable();
+        if (!tracking) query.AsNoTracking();
+        return await query.FirstOrDefaultAsync(x => x.Id == id);
+    }
 }
