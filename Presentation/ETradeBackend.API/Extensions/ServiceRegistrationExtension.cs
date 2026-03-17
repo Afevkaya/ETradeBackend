@@ -1,5 +1,4 @@
-﻿using ETradeBackend.API.Filters;
-
+﻿
 namespace ETradeBackend.API.Extensions;
 
 public static class ServiceRegistrationExtension

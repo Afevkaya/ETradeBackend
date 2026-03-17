@@ -24,7 +24,13 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Infrastructure\ETradeBackend.Infrastructure\ETradeBackend.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Infrastructure\ETradeBackend.Persistence\ETradeBackend.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\uploads\1268762074.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\uploads\759175582.jpg" />
     </ItemGroup>
 
 </Project>

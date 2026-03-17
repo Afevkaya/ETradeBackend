@@ -1,6 +1,7 @@
 using ETradeBackend.API.Extensions;
 using ETradeBackend.API.Filters;
 using ETradeBackend.Application.Extensions;
+using ETradeBackend.Infrastructure.Extensions;
 using ETradeBackend.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +15,11 @@ builder.Services.AddControllers(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services
+    .AddApplication()
+    .AddInfrastructure()
     .AddPersistence(builder.Configuration)
-    .AddPresentation()
-    .AddApplication();
+    .AddPresentation();
+
 
 var app = builder.Build();
 

@@ -1,7 +1,7 @@
 using ETradeBackend.Application.Repositories.Products;
 using ETradeBackend.Application.RequestParameters;
+using ETradeBackend.Application.Services;
 using ETradeBackend.Application.ViewModels.Products;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +12,7 @@ namespace ETradeBackend.API.Controllers
     public class ProductsController(
         IProductReadRepository productReadRepository, 
         IProductWriteRepository productWriteRepository,
-        IWebHostEnvironment webHostEnvironment) : ControllerBase
+        IFileService fileService) : ControllerBase
     {
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAll([FromQuery] Pagination pagination)
@@ -72,21 +72,9 @@ namespace ETradeBackend.API.Controllers
         }
 
         [HttpPost("upload-image")]
-        public async Task<IActionResult> UploadImage()
+        public async Task<IActionResult> UploadImage()  
         {
-            var uploadPath = Path.Combine(webHostEnvironment.WebRootPath, "uploads");
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            var random = new Random();
-            foreach (var file in Request.Form.Files)
-            {
-                var fullPath = Path.Combine(uploadPath, $"{random.Next()}{Path.GetExtension(file.FileName)}");
-                using var fileStream = new FileStream(fullPath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: false);
-                await file.CopyToAsync(fileStream);
-                await fileStream.FlushAsync();
-            }
-            
+            await fileService.UploadAsync("product-images", Request.Form.Files);
             return Ok();
         }
     }
