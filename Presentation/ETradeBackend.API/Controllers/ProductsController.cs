@@ -1,4 +1,5 @@
 using ETradeBackend.Application.Repositories.Products;
+using ETradeBackend.Application.RequestParameters;
 using ETradeBackend.Application.ViewModels.Products;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,20 @@ namespace ETradeBackend.API.Controllers
     public class ProductsController(IProductReadRepository productReadRepository, IProductWriteRepository productWriteRepository) : ControllerBase
     {
         [HttpGet("get-all")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] Pagination pagination)
         {
-            var response = await productReadRepository.GetAll(false).ToListAsync();
-            return Ok(response);
+            var totalCount = productReadRepository.GetAll(false).Count();
+            var response = await productReadRepository
+                .GetAll(false)
+                .Select(p=> new {p.Id, p.Name, p.Price, p.Stock, p.CreatedAt, p.UpdatedAt})
+                .Take(pagination.PageSize)
+                .Skip(pagination.Page * pagination.PageSize)
+                .ToListAsync();
+            return Ok(new
+            {
+                TotalCount = totalCount,
+                Products = response
+            });
         }
         
         [HttpGet("get-by-id/{id:guid}")]
