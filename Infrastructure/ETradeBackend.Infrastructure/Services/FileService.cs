@@ -20,7 +20,7 @@ public class FileService(IWebHostEnvironment webHostEnvironment) : IFileService
         {
             var fileNewName = await FileRenameAsync(uploadPath,file.FileName);
             var result = await CopyFileAsync($"{uploadPath}\\{fileNewName}", file);
-            fileList.Add((fileNewName, $"{uploadPath}\\{fileNewName}"));
+            fileList.Add((fileNewName, $"{path}\\{fileNewName}"));
             results.Add(result);
         }
         

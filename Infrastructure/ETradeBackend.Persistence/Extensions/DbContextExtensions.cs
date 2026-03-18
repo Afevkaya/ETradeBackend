@@ -7,21 +7,31 @@ public static class DbContextExtensions
 {
     public static void UpdateBaseEntityTimestamps(this DbContext context)
     {
-        var entries = context.ChangeTracker.Entries<BaseEntity>();
-        foreach (var entry in entries)
+        var now = DateTime.UtcNow;
+
+        foreach (var entry in context.ChangeTracker.Entries<BaseEntity>())
         {
+            var hasCreatedAt = entry.Metadata.FindProperty(nameof(BaseEntity.CreatedAt)) is not null;
+            var hasUpdatedAt = entry.Metadata.FindProperty(nameof(BaseEntity.UpdatedAt)) is not null;
+
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
-                    entry.Property(e=>e.UpdatedAt).IsModified = false;
+                    if (hasCreatedAt)
+                        entry.Entity.CreatedAt = now;
+
+                    if (hasUpdatedAt)
+                        entry.Property(nameof(BaseEntity.UpdatedAt)).IsModified = false;
                     break;
+
                 case EntityState.Modified:
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
-                    entry.Property(e=>e.CreatedAt).IsModified = false;
-                    break;   
+                    if (hasUpdatedAt)
+                        entry.CurrentValues[nameof(BaseEntity.UpdatedAt)] = now;
+
+                    if (hasCreatedAt)
+                        entry.Property(nameof(BaseEntity.CreatedAt)).IsModified = false;
+                    break;
             }
         }
-
     }
 }

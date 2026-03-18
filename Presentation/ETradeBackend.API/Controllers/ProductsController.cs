@@ -1,7 +1,11 @@
+using ETradeBackend.Application.Repositories.Files;
+using ETradeBackend.Application.Repositories.InvoiceFiles;
+using ETradeBackend.Application.Repositories.ProductImageFiles;
 using ETradeBackend.Application.Repositories.Products;
 using ETradeBackend.Application.RequestParameters;
 using ETradeBackend.Application.Services;
 using ETradeBackend.Application.ViewModels.Products;
+using ETradeBackend.Domain.Entities.Files;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +16,13 @@ namespace ETradeBackend.API.Controllers
     public class ProductsController(
         IProductReadRepository productReadRepository, 
         IProductWriteRepository productWriteRepository,
-        IFileService fileService) : ControllerBase
+        IFileService fileService,
+        IFileReadRepository fileReadRepository,
+        IFileWriteRepository fileWriteRepository,
+        IProductImageFileReadRepository productImageFileReadRepository,
+        IProductImageFileWriteRepository productImageFileWriteRepository,
+        IInvoiceFileReadRepository invoiceFileReadRepository,
+        IInvoiceFileWriteRepository invoiceFileWriteRepository) : ControllerBase
     {
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAll([FromQuery] Pagination pagination)
@@ -74,7 +84,13 @@ namespace ETradeBackend.API.Controllers
         [HttpPost("upload-image")]
         public async Task<IActionResult> UploadImage()  
         {
-            await fileService.UploadAsync("product-images", Request.Form.Files);
+            var result = await fileService.UploadAsync("product-images", Request.Form.Files);
+            await productImageFileWriteRepository.AddRangeAsync(result.Select(r => new ProductImageFile()
+            {
+                Name = r.fileName,
+                Path = r.path
+            }).ToList());
+            await productImageFileWriteRepository.SaveChangesAsync();
             return Ok();
         }
     }
