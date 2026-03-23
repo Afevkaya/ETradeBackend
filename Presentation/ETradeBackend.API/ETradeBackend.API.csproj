@@ -31,6 +31,15 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="wwwroot\uploads\1268762074.jpg" />
       <_ContentIncludedByDefault Remove="wwwroot\uploads\759175582.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106020112-2.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106020112-3.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106020112.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106020123-2.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106020123-3.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106020123.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106145924-2.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106145924-3.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106145924.jpg" />
     </ItemGroup>
 
 </Project>

@@ -7,6 +7,7 @@ public class File : BaseEntity
 {
     public string Name { get; set; }
     public string Path { get; set; }
+    public string Storage { get; set; }
     [NotMapped]
     public override DateTime? UpdatedAt { get; set; }
 }

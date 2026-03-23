@@ -1,0 +1,6 @@
+﻿namespace ETradeBackend.Application.Abstractions.Storages.Local;
+
+public interface ILocalStorage : IStorage
+{
+    
+}

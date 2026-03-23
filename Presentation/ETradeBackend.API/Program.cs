@@ -2,6 +2,8 @@ using ETradeBackend.API.Extensions;
 using ETradeBackend.API.Filters;
 using ETradeBackend.Application.Extensions;
 using ETradeBackend.Infrastructure.Extensions;
+using ETradeBackend.Infrastructure.Services.Storages.Azure;
+using ETradeBackend.Infrastructure.Services.Storages.Local;
 using ETradeBackend.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,8 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services
     .AddApplication()
+    .AddStorage<LocalStorage>()
+    // .AddStorage<AzureStorage>()
     .AddInfrastructure()
     .AddPersistence(builder.Configuration)
     .AddPresentation();
