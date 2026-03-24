@@ -5,6 +5,7 @@ using ETradeBackend.Application.Repositories.ProductImageFiles;
 using ETradeBackend.Application.Repositories.Products;
 using ETradeBackend.Application.RequestParameters;
 using ETradeBackend.Application.ViewModels.Products;
+using ETradeBackend.Domain.Entities;
 using ETradeBackend.Domain.Entities.Files;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,8 @@ namespace ETradeBackend.API.Controllers
         IProductReadRepository productReadRepository, 
         IProductWriteRepository productWriteRepository,
         IProductImageFileWriteRepository productImageFileWriteRepository,
-        IStorageService storageService) : ControllerBase
+        IStorageService storageService,
+        IConfiguration configuration) : ControllerBase
     {
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAll([FromQuery] Pagination pagination)
@@ -77,15 +79,45 @@ namespace ETradeBackend.API.Controllers
         }
 
         [HttpPost("upload-image")]
-        public async Task<IActionResult> UploadImage()  
+        public async Task<IActionResult> UploadImage([FromQuery] Guid productId)  
         {
-            var result = await storageService.UploadAsync("files", Request.Form.Files);
-            await productImageFileWriteRepository.AddRangeAsync(result.Select(x => new ProductImageFile
+            var result = await storageService.UploadAsync("product-images", Request.Form.Files);
+            var product = await productReadRepository.GetByIdAsync(productId);
+            if(product == null) return NotFound();
+            await productImageFileWriteRepository.AddRangeAsync(result.Select(r=> new ProductImageFile
             {
-                Name = x.fileName,
-                Path = x.pathOrContainerName,
-                Storage = storageService.StorageName
+                Name = r.fileName,
+                Path = r.pathOrContainerName,
+                Storage = storageService.StorageName,
+                Products = new List<Product>{product}
             }).ToList());
+            
+            await productWriteRepository.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpGet("get-product-images/{productId:guid}")]
+        public async Task<IActionResult> GetImages(Guid productId)
+        {
+            var product = await productReadRepository.Table.Include(p => p.ProductImageFiles)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+            return Ok(product?.ProductImageFiles.Select(pif => new ProductImageFile
+            {
+                Path = $"{configuration["BaseStorageUrl"]}/{pif.Path}",
+                Name = pif.Name
+            }));
+        }
+
+        [HttpDelete("delete-product-image/{productId:guid}")]
+        public async Task<IActionResult> DeleteImage([FromRoute]Guid productId, [FromQuery]Guid imageId)
+        {
+            var product = await productReadRepository.Table.Include(p => p.ProductImageFiles)
+                .FirstOrDefaultAsync(p => p.Id == productId);
+            if (product == null) return NotFound();
+            var productImageFile = product.ProductImageFiles.FirstOrDefault(pif => pif.Id == imageId);
+            if (productImageFile == null) return NotFound();
+            product.ProductImageFiles.Remove(productImageFile);
+            await productWriteRepository.SaveChangesAsync();
             return Ok();
         }
     }

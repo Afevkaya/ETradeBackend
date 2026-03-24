@@ -40,6 +40,9 @@
       <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106145924-2.jpg" />
       <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106145924-3.jpg" />
       <_ContentIncludedByDefault Remove="wwwroot\product-images\IMG20260106145924.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\files\IMG20260106020112.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\files\IMG20260106020123.jpg" />
+      <_ContentIncludedByDefault Remove="wwwroot\files\IMG20260106145924.jpg" />
     </ItemGroup>
 
 </Project>

@@ -18,8 +18,8 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services
     .AddApplication()
-    .AddStorage<LocalStorage>()
-    // .AddStorage<AzureStorage>()
+    // .AddStorage<LocalStorage>()
+    .AddStorage<AzureStorage>()
     .AddInfrastructure()
     .AddPersistence(builder.Configuration)
     .AddPresentation();
