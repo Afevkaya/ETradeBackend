@@ -1,11 +1,11 @@
-﻿using ETradeBackend.Application.ViewModels.Products;
+﻿using ETradeBackend.Application.Features.Commands.Products.UpdateProduct;
 using FluentValidation;
 
 namespace ETradeBackend.Application.Validators.Products;
 
-public class UpdateProductValidator : AbstractValidator<VMUpdateProduct>
+public class UpdateProductCommandRequestValidator : AbstractValidator<UpdateProductCommandRequest>
 {
-    public UpdateProductValidator()
+    public UpdateProductCommandRequestValidator()
     {
         RuleFor(p => p.Id).
             NotEmpty()

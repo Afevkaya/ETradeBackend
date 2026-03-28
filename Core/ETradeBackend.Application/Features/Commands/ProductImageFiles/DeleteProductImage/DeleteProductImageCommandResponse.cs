@@ -1,0 +1,3 @@
+﻿namespace ETradeBackend.Application.Features.Commands.ProductImageFiles.DeleteProductImage;
+
+public record DeleteProductImageCommandResponse();

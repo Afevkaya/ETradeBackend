@@ -1,11 +1,11 @@
-﻿using ETradeBackend.Application.ViewModels.Products;
+﻿using ETradeBackend.Application.Features.Commands.Products.CreateProduct;
 using FluentValidation;
 
 namespace ETradeBackend.Application.Validators.Products;
 
-public class CreateProductValidator : AbstractValidator<VMCreateProduct>
+public class CreateProductCommandRequestValidator : AbstractValidator<CreateProductCommandRequest>
 {
-    public CreateProductValidator()
+    public CreateProductCommandRequestValidator()
     {
         RuleFor(p => p.Name)
             .NotEmpty()
@@ -22,6 +22,5 @@ public class CreateProductValidator : AbstractValidator<VMCreateProduct>
             .NotEmpty()
             .NotNull().WithMessage("Lütfen fiyat bilgisini boş geçmeyin")
             .Must(p=>p >= 0).WithMessage("Fiyat bilgisi sıfırdan küçük olamaz");
-        
     }
 }
