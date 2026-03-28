@@ -4,6 +4,7 @@ using ETradeBackend.Application.Repositories.InvoiceFiles;
 using ETradeBackend.Application.Repositories.Orders;
 using ETradeBackend.Application.Repositories.ProductImageFiles;
 using ETradeBackend.Application.Repositories.Products;
+using ETradeBackend.Domain.Entities.Identities;
 using ETradeBackend.Persistence.Contexts;
 using ETradeBackend.Persistence.Repositories.Customers;
 using ETradeBackend.Persistence.Repositories.Files;
@@ -25,6 +26,14 @@ public static class ServiceRegistrationExtension
         {
             options.UseNpgsql(configuration.GetConnectionString("ETradeDbConnection"));
         });
+        services.AddIdentity<AppUser,AppRole>(options =>
+        {
+            options.Password.RequiredLength = 3;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        }).AddEntityFrameworkStores<ETradeDbContext>();
 
         services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
         services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();

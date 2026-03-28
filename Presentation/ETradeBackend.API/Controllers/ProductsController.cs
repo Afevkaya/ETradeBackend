@@ -1,4 +1,3 @@
-using ETradeBackend.Application.Abstractions.Storages;
 using ETradeBackend.Application.Features.Commands.ProductImageFiles.DeleteProductImage;
 using ETradeBackend.Application.Features.Commands.ProductImageFiles.UploadImageFile;
 using ETradeBackend.Application.Features.Commands.Products.CreateProduct;
@@ -6,8 +5,6 @@ using ETradeBackend.Application.Features.Commands.Products.DeleteProduct;
 using ETradeBackend.Application.Features.Commands.Products.UpdateProduct;
 using ETradeBackend.Application.Features.Queries.Products.GetAllProduct;
 using ETradeBackend.Application.Features.Queries.Products.GetByIdProduct;
-using ETradeBackend.Application.Repositories.ProductImageFiles;
-using ETradeBackend.Application.Repositories.Products;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
