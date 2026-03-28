@@ -9,8 +9,15 @@ namespace ETradeBackend.API.Controllers
     [ApiController]
     public class UsersController(IMediator mediator) : ControllerBase
     {
-        
+        [HttpPost("create")]
         public async Task<IActionResult> Create(CreateUserCommandRequest request)
+        {
+            var response = await mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(CreateUserCommandRequest request)
         {
             var response = await mediator.Send(request);
             return Ok(response);
