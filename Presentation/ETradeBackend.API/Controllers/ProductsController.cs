@@ -6,12 +6,14 @@ using ETradeBackend.Application.Features.Commands.Products.UpdateProduct;
 using ETradeBackend.Application.Features.Queries.Products.GetAllProduct;
 using ETradeBackend.Application.Features.Queries.Products.GetByIdProduct;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETradeBackend.API.Controllers
 {
     [Route("api/products")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class ProductsController(IMediator mediator) : ControllerBase
     {
         [HttpGet("get-all")]

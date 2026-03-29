@@ -7,7 +7,7 @@ public static class DbContextExtensions
 {
     public static void UpdateBaseEntityTimestamps(this DbContext context)
     {
-        var now = DateTime.UtcNow;
+        var now = DateTime.UtcNow.AddHours(3);
 
         foreach (var entry in context.ChangeTracker.Entries<BaseEntity>())
         {

@@ -1,3 +1,5 @@
-﻿namespace ETradeBackend.Application.Features.Commands.AppUsers.LoginUser;
+﻿using ETradeBackend.Application.DTOs;
 
-public record LoginUserCommandResponse();
+namespace ETradeBackend.Application.Features.Commands.AppUsers.LoginUser;
+
+public record LoginUserCommandResponse(Token Token);
