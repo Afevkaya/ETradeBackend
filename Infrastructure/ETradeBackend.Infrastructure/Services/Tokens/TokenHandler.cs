@@ -14,7 +14,7 @@ public class TokenHandler(IConfiguration configuration) : ITokenHandler
         Token token = new();
         
         // SecurityKey'in simetrik olduğunu belirtiyoruz.
-        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
+        SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]!));
         
         // Şifrelenmiş kimliği oluşturuyoruz.
         SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
