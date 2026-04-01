@@ -20,10 +20,10 @@ public class TokenHandler(IConfiguration configuration) : ITokenHandler
         SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
         
         var now = DateTime.UtcNow;
-        var expirationMinutes = configuration.GetValue<int>("Token:Expiration:Minutes");
+        var expirationMinutes = configuration.GetValue<int>("Token:Expiration:Seconds");
         
         // Oluşturulacak token ayarlarını veriyoruz.
-        token.Expiration = now.AddMinutes(expirationMinutes);
+        token.Expiration = now.AddSeconds(expirationMinutes);
         JwtSecurityToken jwtSecurityToken = new(
             audience: configuration["Token:Audience"],
             issuer: configuration["Token:Issuer"],

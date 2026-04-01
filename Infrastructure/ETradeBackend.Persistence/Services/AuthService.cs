@@ -1,0 +1,72 @@
+﻿using ETradeBackend.Application.Abstractions.Services;
+using ETradeBackend.Application.Abstractions.Tokens;
+using ETradeBackend.Application.DTOs;
+using ETradeBackend.Application.Exceptions;
+using ETradeBackend.Domain.Entities.Identities;
+using Google.Apis.Auth;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+
+namespace ETradeBackend.Persistence.Services;
+
+public class AuthService(
+    UserManager<AppUser> userManager,
+    SignInManager<AppUser> signInManager,
+    ITokenHandler tokenHandler,
+    IConfiguration configuration) : IAuthService
+{
+    public async Task<Token> LoginAsync(string usernameOrEmail, string password)
+    {
+        // Authentication
+        var user = await userManager.FindByNameAsync(usernameOrEmail) ?? await userManager.FindByEmailAsync(usernameOrEmail);
+        if (user == null) throw new NotFoundUserException();
+        var result = await signInManager.CheckPasswordSignInAsync(user, password, false);
+
+        // Authorization
+        if (!result.Succeeded) throw new AuthenticationErrorException();
+        var token = tokenHandler.CreateAccessToken();
+        return token;
+    }
+
+    public async Task<Token> LoginWithGoogleAsync(string idToken)
+    {
+        var validationSettings = new GoogleJsonWebSignature.ValidationSettings
+        {
+            Audience =
+            [
+                configuration["ExternalLogins:Google:ClientId"]
+            ] // Google API Console'dan aldığınız Client ID
+        };
+
+        var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, validationSettings);
+        var userLoginInfo = new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
+        var user = await userManager.FindByLoginAsync(userLoginInfo.LoginProvider, userLoginInfo.ProviderKey);
+        var result = user != null;
+        if(user == null)
+        {
+            user = await userManager.FindByEmailAsync(payload.Email);
+            if(user == null)
+            {
+                user = new AppUser
+                {
+                    Id = Guid.NewGuid(),
+                    UserName = payload.Email,
+                    Email = payload.Email,
+                    NameSurname = payload.Name
+                };
+                // aspnetusers tablosuna kaydet
+                var identityResult = await userManager.CreateAsync(user);
+                result = identityResult.Succeeded;
+            }
+        }
+
+        // aspnetuserlogins tablosuna kaydet
+        if (result)
+            await userManager.AddLoginAsync(user, userLoginInfo);
+        else
+            throw new Exception("Google ile giriş başarısız oldu.");
+        
+        var token = tokenHandler.CreateAccessToken();
+        return token;
+    }
+}

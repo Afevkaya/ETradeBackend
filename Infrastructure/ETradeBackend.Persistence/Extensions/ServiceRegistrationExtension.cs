@@ -1,4 +1,6 @@
-﻿using ETradeBackend.Application.Repositories.Customers;
+﻿using ETradeBackend.Application.Abstractions.Services;
+using ETradeBackend.Application.Abstractions.Services.Authentications;
+using ETradeBackend.Application.Repositories.Customers;
 using ETradeBackend.Application.Repositories.Files;
 using ETradeBackend.Application.Repositories.InvoiceFiles;
 using ETradeBackend.Application.Repositories.Orders;
@@ -12,6 +14,7 @@ using ETradeBackend.Persistence.Repositories.InvoiceFiles;
 using ETradeBackend.Persistence.Repositories.Orders;
 using ETradeBackend.Persistence.Repositories.ProductImageFiles;
 using ETradeBackend.Persistence.Repositories.Products;
+using ETradeBackend.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,6 +55,11 @@ public static class ServiceRegistrationExtension
 
         services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
         services.AddScoped<IProductImageFileWriteRepository, ProductImageFileWriteRepository>();
+
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IInternalAuthentication, AuthService>();
+        services.AddScoped<IExternalAuthentication, AuthService>();
 
         return services;
     }
