@@ -1,5 +1,7 @@
+using ETradeBackend.Application.DTOs.Tokens;
 using ETradeBackend.Application.Features.Commands.AppUsers.GoogleLogin;
 using ETradeBackend.Application.Features.Commands.AppUsers.LoginUser;
+using ETradeBackend.Application.Features.Commands.AppUsers.RefreshTokenLogin;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +22,13 @@ namespace ETradeBackend.API.Controllers
         public async Task<IActionResult> GoogleLogin(GoogleLoginCommandRequest request)
         {
             var response = await mediator.Send(request);
+            return Ok(response);
+        }
+
+        [HttpPost("refresh-token-login")]
+        public async Task<IActionResult> RefreshTokenLogin([FromBody] RefreshTokenRequest request)
+        {
+            var response = await mediator.Send(new RefreshTokenLoginCommandRequest(request.RefreshToken));
             return Ok(response);
         }
     }

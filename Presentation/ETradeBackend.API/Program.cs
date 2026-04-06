@@ -53,7 +53,8 @@ builder.Services
                     builder.Configuration[
                         "Token:SecurityKey"]
                     ! // Oluşturulacak token değerini imzalarken kullanılan anahtarın doğruluğunu kontrol eden değerdir --> true
-                ))
+                )),
+            LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null && expires > DateTime.UtcNow
         };
     });
 

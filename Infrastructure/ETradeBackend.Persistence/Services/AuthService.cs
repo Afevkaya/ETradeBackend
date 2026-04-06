@@ -1,10 +1,12 @@
 ﻿using ETradeBackend.Application.Abstractions.Services;
 using ETradeBackend.Application.Abstractions.Tokens;
 using ETradeBackend.Application.DTOs;
+using ETradeBackend.Application.DTOs.Tokens;
 using ETradeBackend.Application.Exceptions;
 using ETradeBackend.Domain.Entities.Identities;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace ETradeBackend.Persistence.Services;
@@ -12,6 +14,7 @@ namespace ETradeBackend.Persistence.Services;
 public class AuthService(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
+    IUserService userService,
     ITokenHandler tokenHandler,
     IConfiguration configuration) : IAuthService
 {
@@ -25,6 +28,16 @@ public class AuthService(
         // Authorization
         if (!result.Succeeded) throw new AuthenticationErrorException();
         var token = tokenHandler.CreateAccessToken();
+        await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
+        return token;
+    }
+
+    public async Task<Token> RefreshTokenLoginAsync(string refreshToken)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        if (user == null || user.RefreshTokenExpiration <= DateTime.UtcNow) throw new NotFoundUserException();
+        var token = tokenHandler.CreateAccessToken();
+        await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
         return token;
     }
 
@@ -67,6 +80,7 @@ public class AuthService(
             throw new Exception("Google ile giriş başarısız oldu.");
         
         var token = tokenHandler.CreateAccessToken();
+        await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
         return token;
     }
 }

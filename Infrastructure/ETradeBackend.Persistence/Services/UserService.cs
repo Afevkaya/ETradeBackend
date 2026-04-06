@@ -1,5 +1,6 @@
 ﻿using ETradeBackend.Application.Abstractions.Services;
 using ETradeBackend.Application.DTOs.Users;
+using ETradeBackend.Application.Exceptions;
 using ETradeBackend.Domain.Entities.Identities;
 using Microsoft.AspNetCore.Identity;
 
@@ -26,5 +27,13 @@ public class UserService(UserManager<AppUser> userManager) : IUserService
             e.Code
         }));
         return new CreateUserResponse(false, $"Kullanıcı oluşturulamadı: {errors}");
+    }
+
+    public async Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenExpiration, int addOnAccessTokenDate)
+    {
+        if (user == null) throw new NotFoundUserException();
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiration = accessTokenExpiration.AddSeconds(addOnAccessTokenDate);
+        await userManager.UpdateAsync(user);
     }
 }
