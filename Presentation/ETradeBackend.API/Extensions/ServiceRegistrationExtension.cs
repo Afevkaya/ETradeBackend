@@ -21,15 +21,15 @@ public static class ServiceRegistrationExtension
         });
 
         services.AddControllers();
-        services.AddSwaggerGenExtensions();
-        services.AddLoggingExtensions();
-        services.AddAuthenticationExtensions(configuration);
+        services.AddSwaggerGenExtension();
+        services.AddLoggingExtension();
+        services.AddAuthenticationExtension(configuration);
         services.AddAuthorization();
 
         return services;
     }
     
-    private static IServiceCollection AddSwaggerGenExtensions(this IServiceCollection services)
+    private static IServiceCollection AddSwaggerGenExtension(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {
@@ -61,7 +61,7 @@ public static class ServiceRegistrationExtension
 
         return services;
     }
-    private static IServiceCollection AddControllersExtensions(this IServiceCollection services)
+    private static IServiceCollection AddControllersExtension(this IServiceCollection services)
     {
         // services.AddControllers(options =>
         // {
@@ -71,7 +71,7 @@ public static class ServiceRegistrationExtension
         services.AddControllers();
         return services;
     }
-    private static IServiceCollection AddAuthenticationExtensions(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddAuthenticationExtension(this IServiceCollection services, IConfiguration configuration)
     {
         services
             .AddAuthentication(options =>
@@ -102,7 +102,7 @@ public static class ServiceRegistrationExtension
 
         return services;
     }
-    private static IServiceCollection AddLoggingExtensions(this IServiceCollection services)
+    private static IServiceCollection AddLoggingExtension(this IServiceCollection services)
     {
         services.AddHttpLogging(logging =>
         {

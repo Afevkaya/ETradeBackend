@@ -31,10 +31,10 @@ builder.Host.UseSerilog((hostingContext, configuration) =>
                 { "time_stamp", new TimestampColumnWriter() },
                 { "exception", new ExceptionColumnWriter() },
                 { "log_event", new LogEventSerializedColumnWriter() },
-                {"user_name", new UserNameColumnWriter()}
+                { "user_name", new UserNameColumnWriter()}
             }
         )
-        .WriteTo.Seq(hostingContext?.Configuration?["Seq:ServerUrl"] ?? null)
+        .WriteTo.Seq((hostingContext?.Configuration?["Seq:ServerUrl"] ?? null)!)
         .Enrich.FromLogContext()
         .MinimumLevel.Information();
 });
@@ -56,7 +56,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapOpenApi();
 }
-
+app.ConfigureExceptionHandler(app.Services.GetRequiredService<ILogger<Program>>());
 app.UseSerilogRequestLogging();
 // HTTP request pipeline
 app.UseHttpsRedirection();
@@ -71,7 +71,9 @@ app.UseAuthorization();
 
 app.Use(async (context, next) =>
 {
-    var userName = context.User?.Identity?.IsAuthenticated != null || true ? context.User?.Identity?.Name : "Unknown";
+    var userName = context.User?.Identity?.IsAuthenticated == true
+        ? context.User.Identity!.Name
+        : "Unknown";
     LogContext.PushProperty("user_name", userName);
     await next.Invoke();
 });
