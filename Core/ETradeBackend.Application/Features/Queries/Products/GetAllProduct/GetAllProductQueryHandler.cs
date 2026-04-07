@@ -1,10 +1,11 @@
 ﻿using ETradeBackend.Application.Repositories.Products;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace ETradeBackend.Application.Features.Queries.Products.GetAllProduct;
 
-public class GetAllProductQueryHandler(IProductReadRepository productReadRepository) : IRequestHandler<GetAllProductQueryRequest, GetAllProductQueryResponse>
+public class GetAllProductQueryHandler(IProductReadRepository productReadRepository, ILogger<GetAllProductQueryHandler> logger) : IRequestHandler<GetAllProductQueryRequest, GetAllProductQueryResponse>
 {
     public async Task<GetAllProductQueryResponse> Handle(GetAllProductQueryRequest request, CancellationToken cancellationToken)
     {
@@ -16,6 +17,7 @@ public class GetAllProductQueryHandler(IProductReadRepository productReadReposit
             .Take(request.PageSize)
             .ToListAsync();
         
+        logger.LogInformation("Get all products");
         return new GetAllProductQueryResponse(totalCount, products);
     }
 }

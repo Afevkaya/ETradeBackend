@@ -13,7 +13,7 @@ namespace ETradeBackend.API.Controllers
 {
     [Route("api/products")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Admin")]
+    [Authorize]
     public class ProductsController(IMediator mediator) : ControllerBase
     {
         [HttpGet("get-all")]

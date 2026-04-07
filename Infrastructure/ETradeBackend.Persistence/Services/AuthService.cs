@@ -27,7 +27,7 @@ public class AuthService(
 
         // Authorization
         if (!result.Succeeded) throw new AuthenticationErrorException();
-        var token = tokenHandler.CreateAccessToken();
+        var token = tokenHandler.CreateAccessToken(user);
         await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
         return token;
     }
@@ -36,7 +36,7 @@ public class AuthService(
     {
         var user = await userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         if (user == null || user.RefreshTokenExpiration <= DateTime.UtcNow) throw new NotFoundUserException();
-        var token = tokenHandler.CreateAccessToken();
+        var token = tokenHandler.CreateAccessToken(user);
         await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
         return token;
     }
@@ -79,7 +79,7 @@ public class AuthService(
         else
             throw new Exception("Google ile giriş başarısız oldu.");
         
-        var token = tokenHandler.CreateAccessToken();
+        var token = tokenHandler.CreateAccessToken(user);
         await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
         return token;
     }

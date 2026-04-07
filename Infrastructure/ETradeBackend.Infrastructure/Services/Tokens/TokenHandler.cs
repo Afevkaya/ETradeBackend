@@ -1,9 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using ETradeBackend.Application.Abstractions.Tokens;
 using ETradeBackend.Application.DTOs;
 using ETradeBackend.Application.DTOs.Tokens;
+using ETradeBackend.Domain.Entities.Identities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,7 +13,7 @@ namespace ETradeBackend.Infrastructure.Services.Tokens;
 
 public class TokenHandler(IConfiguration configuration) : ITokenHandler
 {
-    public Token CreateAccessToken()
+    public Token CreateAccessToken(AppUser user)
     {
         Token token = new();
         // SecurityKey'in simetrik olduğunu belirtiyoruz.
@@ -30,7 +32,8 @@ public class TokenHandler(IConfiguration configuration) : ITokenHandler
             issuer: configuration["Token:Issuer"],
             expires: token.Expiration,
             notBefore: now,
-            signingCredentials: signingCredentials
+            signingCredentials: signingCredentials,
+            claims: new List<Claim>{new(ClaimTypes.Name, user.UserName ?? string.Empty)}
         );
         
         JwtSecurityTokenHandler tokenHandler = new();
