@@ -16,7 +16,8 @@ public static class ServiceRegistrationExtension
             {
                 policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .AllowCredentials();
             });
         });
 
