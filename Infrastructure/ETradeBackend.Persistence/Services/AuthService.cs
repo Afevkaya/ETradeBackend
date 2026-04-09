@@ -80,7 +80,7 @@ public class AuthService(
             throw new Exception("Google ile giriş başarısız oldu.");
         
         var token = tokenHandler.CreateAccessToken(user);
-        await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
+        await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 300);
         return token;
     }
 }

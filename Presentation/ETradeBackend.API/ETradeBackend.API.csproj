@@ -30,6 +30,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Infrastructure\ETradeBackend.Infrastructure\ETradeBackend.Infrastructure.csproj" />
       <ProjectReference Include="..\..\Infrastructure\ETradeBackend.Persistence\ETradeBackend.Persistence.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\ETradeBackend.SignalR\ETradeBackend.SignalR.csproj" />
     </ItemGroup>
 
     <ItemGroup>

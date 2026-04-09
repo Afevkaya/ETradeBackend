@@ -3,6 +3,7 @@ using ETradeBackend.Application.Extensions;
 using ETradeBackend.Infrastructure.Extensions;
 using ETradeBackend.Infrastructure.Services.Storages.Azure;
 using ETradeBackend.Persistence.Extensions;
+using ETradeBackend.SignalR.Extensions;
 using Serilog;
 using Serilog.Context;
 
@@ -17,7 +18,8 @@ builder.Services
     .AddStorage<AzureStorage>()
     .AddInfrastructure()
     .AddPersistence(builder.Configuration)
-    .AddPresentation(builder.Configuration);
+    .AddPresentation(builder.Configuration)
+    .AddSignalRServices();
 
 var app = builder.Build();
 
@@ -53,5 +55,7 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
+
+app.MapHubs();
 
 app.Run();
