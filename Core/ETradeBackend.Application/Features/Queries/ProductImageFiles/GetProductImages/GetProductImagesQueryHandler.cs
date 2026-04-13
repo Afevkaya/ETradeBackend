@@ -11,11 +11,15 @@ public class GetProductImagesQueryHandler(
 {
     public async Task<List<GetProductImagesQueryResponse>> Handle(GetProductImagesQueryRequest request, CancellationToken cancellationToken)
     {
-        var product = await productReadRepository.Table.Include(p => p.ProductImageFiles)
+        var product = await productReadRepository.Table
+            .Include(p => p.ProductProductImageFiles)
+            .ThenInclude(pif => pif.ProductImageFile)
             .FirstOrDefaultAsync(p => p.Id == request.ProductId, cancellationToken: cancellationToken);
         
-        var response = new List<GetProductImagesQueryResponse>(product?.ProductImageFiles.Select(pif 
-            => new GetProductImagesQueryResponse(pif.Id, pif.Name, pif.Path)).ToList() ?? []);
-        return response;
+        return product == null ? null 
+            : product.ProductProductImageFiles
+                .Select(productProductImageFile => productProductImageFile.ProductImageFile)
+                .Select(imageFile => 
+                    new GetProductImagesQueryResponse(imageFile.Id, imageFile.Name, configuration["BaseStorageUrl"] + imageFile.Path)).ToList();
     }
 }

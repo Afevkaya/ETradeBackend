@@ -1,3 +1,4 @@
+using ETradeBackend.Application.Features.Commands.ProductImageFiles.ChangeShowcaseImage;
 using ETradeBackend.Application.Features.Commands.ProductImageFiles.DeleteProductImage;
 using ETradeBackend.Application.Features.Commands.ProductImageFiles.UploadImageFile;
 using ETradeBackend.Application.Features.Commands.Products.CreateProduct;
@@ -13,7 +14,6 @@ namespace ETradeBackend.API.Controllers
 {
     [Route("api/products")]
     [ApiController]
-    [Authorize]
     public class ProductsController(IMediator mediator) : ControllerBase
     {
         [HttpGet("get-all")]
@@ -30,7 +30,9 @@ namespace ETradeBackend.API.Controllers
             return Ok(response);
         }
 
+        
         [HttpPost("create")]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateProductCommandRequest request)
         {
             await mediator.Send(request);
@@ -38,6 +40,7 @@ namespace ETradeBackend.API.Controllers
         }
         
         [HttpPut("update")]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] UpdateProductCommandRequest request)
         {
             await mediator.Send(request);
@@ -45,6 +48,7 @@ namespace ETradeBackend.API.Controllers
         }
         
         [HttpDelete("delete/{Id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete([FromRoute] DeleteProductCommandRequest request)
         {
             await mediator.Send(request);
@@ -52,6 +56,7 @@ namespace ETradeBackend.API.Controllers
         }
 
         [HttpPost("upload-image")]
+        [Authorize]
         public async Task<IActionResult> UploadImage([FromQuery]UploadImageFileCommandRequest request)
         {
             request.FormFileCollection = Request.Form.Files;
@@ -60,6 +65,7 @@ namespace ETradeBackend.API.Controllers
         }
 
         [HttpGet("get-product-images/{productId:guid}")]
+        [Authorize]
         public async Task<IActionResult> GetImages([FromRoute]GetByIdProductQueryRequest request)
         {
             var response = await mediator.Send(request);
@@ -67,11 +73,21 @@ namespace ETradeBackend.API.Controllers
         }
 
         [HttpDelete("delete-product-image/{productId:guid}")]
+        [Authorize]
         public async Task<IActionResult> DeleteImage([FromRoute] DeleteProductImageCommandRequest request, [FromQuery] Guid imageId)
         {
             request.ImageId = imageId;
             await mediator.Send(request);
             return Ok();
         }
+
+        [HttpPut("change-showcase-image/{productId:guid}/{imageId:guid}")]
+        [Authorize]
+        public async Task<IActionResult> ChangeShowcaseImage([FromRoute] ChangeShowcaseImageCommandRequest request)
+        {
+            await mediator.Send(request);
+            return Ok();
+        }
+
     }
 }

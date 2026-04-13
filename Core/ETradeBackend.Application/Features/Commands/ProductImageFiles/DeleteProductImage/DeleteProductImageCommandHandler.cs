@@ -10,11 +10,13 @@ public class DeleteProductImageCommandHandler(
 {
     public async Task<DeleteProductImageCommandResponse> Handle(DeleteProductImageCommandRequest request, CancellationToken cancellationToken)
     {
-        var product = await productReadRepository.Table.Include(p => p.ProductImageFiles)
+        var product = await productReadRepository.Table.Include(p => p.ProductProductImageFiles.Select(pif => pif.ProductImageFile))
             .FirstOrDefaultAsync(p => p.Id == request.ProductId);
-        var productImageFile = product?.ProductImageFiles.FirstOrDefault(pif => pif.Id == request.ImageId);
+        var productImageFile = product?.ProductProductImageFiles.FirstOrDefault(pif => pif.ProductImageFileId == request.ImageId)?.ProductImageFile;
+        
+        
         if (productImageFile == null) return null;
-        product?.ProductImageFiles.Remove(productImageFile);
+        product?.ProductProductImageFiles.Remove(product.ProductProductImageFiles.FirstOrDefault(pif => pif.ProductImageFileId == request.ImageId));
         await productWriteRepository.SaveChangesAsync();
         return new();
     }

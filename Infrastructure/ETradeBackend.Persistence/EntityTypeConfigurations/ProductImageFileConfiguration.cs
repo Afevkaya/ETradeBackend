@@ -8,8 +8,6 @@ public class ProductImageFileConfiguration : IEntityTypeConfiguration<ProductIma
 {
     public void Configure(EntityTypeBuilder<ProductImageFile> builder)
     {
-        builder.HasMany(pif => pif.Products)
-               .WithMany(p => p.ProductImageFiles)
-               .UsingEntity(j => j.ToTable("productproductimagefiles"));
+        
     }
 }

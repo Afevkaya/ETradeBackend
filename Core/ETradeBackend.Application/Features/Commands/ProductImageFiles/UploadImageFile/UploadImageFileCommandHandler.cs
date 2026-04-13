@@ -23,7 +23,13 @@ public class UploadImageFileCommandHandler(
             Name = r.fileName,
             Path = r.pathOrContainerName,
             Storage = storageService.StorageName,
-            Products = new List<Product>{product}
+            ProductProductImageFiles = new List<ProductProductImageFiles>
+            {
+                new()
+                {
+                    Product = product
+                }
+            }
         }).ToList());
             
         await productWriteRepository.SaveChangesAsync();
