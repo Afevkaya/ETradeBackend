@@ -1,4 +1,5 @@
-﻿using ETradeBackend.Application.Abstractions.Storages;
+﻿using ETradeBackend.Application.Abstractions.Services;
+using ETradeBackend.Application.Abstractions.Storages;
 using ETradeBackend.Application.Abstractions.Tokens;
 using ETradeBackend.Infrastructure.Enums;
 using ETradeBackend.Infrastructure.Services.Storages;
@@ -14,13 +15,13 @@ public static class ServiceRegistrationExtension
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped<IStorageService, StorageService>();
+        services.AddScoped<ITokenHandler, TokenHandler>();
         return services;
     }
     
     public static IServiceCollection AddStorage<T>(this IServiceCollection services) where T : Storage, IStorage
     {
         services.AddScoped<IStorage, T>();
-        services.AddScoped<ITokenHandler, TokenHandler>();
         return services;
     }
     

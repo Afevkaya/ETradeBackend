@@ -31,7 +31,7 @@ public class UserService(UserManager<AppUser> userManager) : IUserService
 
     public async Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenExpiration, int addOnAccessTokenDate)
     {
-        if (user == null) throw new NotFoundUserException();
+        if (user == null) throw new UserNotFoundException();
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiration = accessTokenExpiration.AddSeconds(addOnAccessTokenDate);
         await userManager.UpdateAsync(user);

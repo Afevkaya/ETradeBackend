@@ -1,4 +1,5 @@
 ﻿using ETradeBackend.Domain.Entities;
+using ETradeBackend.Domain.Entities.Baskets;
 using ETradeBackend.Domain.Entities.Common;
 using ETradeBackend.Domain.Entities.Files;
 using ETradeBackend.Domain.Entities.Identities;
@@ -16,6 +17,8 @@ public class ETradeDbContext(DbContextOptions<ETradeDbContext> options) : Identi
     public DbSet<Domain.Entities.Files.File> Files { get; set; }
     public DbSet<ProductImageFile> ProductImageFiles { get; set; }
     public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+    public DbSet<Basket> Baskets { get; set; }
+    public DbSet<BasketItem> BasketItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

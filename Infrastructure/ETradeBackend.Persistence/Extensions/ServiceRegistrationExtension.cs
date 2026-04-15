@@ -1,5 +1,7 @@
 ﻿using ETradeBackend.Application.Abstractions.Services;
 using ETradeBackend.Application.Abstractions.Services.Authentications;
+using ETradeBackend.Application.Repositories.BasketItems;
+using ETradeBackend.Application.Repositories.Baskets;
 using ETradeBackend.Application.Repositories.Customers;
 using ETradeBackend.Application.Repositories.Files;
 using ETradeBackend.Application.Repositories.InvoiceFiles;
@@ -8,6 +10,8 @@ using ETradeBackend.Application.Repositories.ProductImageFiles;
 using ETradeBackend.Application.Repositories.Products;
 using ETradeBackend.Domain.Entities.Identities;
 using ETradeBackend.Persistence.Contexts;
+using ETradeBackend.Persistence.Repositories.BasketItems;
+using ETradeBackend.Persistence.Repositories.Baskets;
 using ETradeBackend.Persistence.Repositories.Customers;
 using ETradeBackend.Persistence.Repositories.Files;
 using ETradeBackend.Persistence.Repositories.InvoiceFiles;
@@ -60,6 +64,13 @@ public static class ServiceRegistrationExtension
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IInternalAuthentication, AuthService>();
         services.AddScoped<IExternalAuthentication, AuthService>();
+        
+        services.AddScoped<IBasketReadRepository,BasketReadRepository>();
+        services.AddScoped<IBasketWriteRepository,BasketWriteRepository>();
+        services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
+        services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
+
+        services.AddScoped<IBasketService, BasketService>();
 
         return services;
     }

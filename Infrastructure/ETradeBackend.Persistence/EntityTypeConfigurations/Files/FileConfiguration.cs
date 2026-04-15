@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using File = ETradeBackend.Domain.Entities.Files.File;
 
-namespace ETradeBackend.Persistence.EntityTypeConfigurations;
+namespace ETradeBackend.Persistence.EntityTypeConfigurations.Files;
 
 public class FileConfiguration : IEntityTypeConfiguration<File>
 {

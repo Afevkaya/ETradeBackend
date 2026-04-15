@@ -22,7 +22,7 @@ public class AuthService(
     {
         // Authentication
         var user = await userManager.FindByNameAsync(usernameOrEmail) ?? await userManager.FindByEmailAsync(usernameOrEmail);
-        if (user == null) throw new NotFoundUserException();
+        if (user == null) throw new UserNotFoundException();
         var result = await signInManager.CheckPasswordSignInAsync(user, password, false);
 
         // Authorization
@@ -35,7 +35,7 @@ public class AuthService(
     public async Task<Token> RefreshTokenLoginAsync(string refreshToken)
     {
         var user = await userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
-        if (user == null || user.RefreshTokenExpiration <= DateTime.UtcNow) throw new NotFoundUserException();
+        if (user == null || user.RefreshTokenExpiration <= DateTime.UtcNow) throw new UserNotFoundException();
         var token = tokenHandler.CreateAccessToken(user);
         await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 60);
         return token;

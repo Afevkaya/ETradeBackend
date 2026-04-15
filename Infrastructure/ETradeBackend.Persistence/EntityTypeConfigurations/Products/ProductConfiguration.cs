@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ETradeBackend.Persistence.EntityTypeConfigurations;
+namespace ETradeBackend.Persistence.EntityTypeConfigurations.Products;
 
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {

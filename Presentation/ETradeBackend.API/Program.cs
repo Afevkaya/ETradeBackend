@@ -10,6 +10,7 @@ using Serilog.Context;
 var builder = WebApplication.CreateBuilder(args);
 
 // Service registrations
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Host.ConfigureSeriLog();
 builder.Services
