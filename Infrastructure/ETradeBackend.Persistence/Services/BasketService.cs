@@ -69,6 +69,9 @@ public class BasketService(
         await basketItemWriteRepository.SaveChangesAsync();
     }
 
+    public Basket? GetUserActiveBasket { get => ContextUser().Result; }
+
+
     private async Task<Basket?> ContextUser()
     {
         var userName = httpContextAccessor.HttpContext?.User?.Identity?.Name;
@@ -95,13 +98,5 @@ public class BasketService(
 
         await basketWriteRepository.SaveChangesAsync();
         return targetBasket;
-    }
-    
-    private async Task<decimal> CalculateBasketTotalPriceAsync(Guid basketId)
-    {
-        return await basketItemReadRepository
-            .GetWhere(bi => bi.BasketId == basketId && !bi.IsDeleted && !bi.Product.IsDeleted)
-            .Select(bi => (decimal?)(bi.Quantity * bi.Product.Price))
-            .SumAsync() ?? 0;
     }
 }

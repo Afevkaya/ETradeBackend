@@ -11,7 +11,6 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(o => o.Id);
         builder.Property(o => o.Description).IsRequired().HasMaxLength(255);
         builder.Property(o => o.Address).IsRequired().HasMaxLength(255);
-        builder.HasOne(o => o.Customer).WithMany(c => c.Orders).HasForeignKey(o => o.CustomerId);
         
     }
 }
