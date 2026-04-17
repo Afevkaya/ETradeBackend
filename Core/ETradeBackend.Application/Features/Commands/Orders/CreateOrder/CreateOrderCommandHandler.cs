@@ -12,7 +12,7 @@ public class CreateOrderCommandHandler(
     public async Task<CreateOrderCommandResponse> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
     {
         if (basketService.GetUserActiveBasket == null) return new CreateOrderCommandResponse();
-        await orderService.CreateOrderAsync(new DTOs.Orders.CreateOrder(request.Address, request.Description,
+        await orderService.CreateOrderAsync(new DTOs.Orders.Requests.CreateOrder(request.Address, request.Description,
             basketService.GetUserActiveBasket.Id));
         await orderHubService.OrderAddedMessageAsync("Yeni bir sipariş oluşturuldu.");
 

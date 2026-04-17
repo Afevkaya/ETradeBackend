@@ -3,6 +3,7 @@ using ETradeBackend.Application.Repositories.ProductImageFiles;
 using ETradeBackend.Application.Repositories.Products;
 using ETradeBackend.Domain.Entities;
 using ETradeBackend.Domain.Entities.Files;
+using ETradeBackend.Domain.Entities.Products;
 using MediatR;
 
 namespace ETradeBackend.Application.Features.Commands.ProductImageFiles.UploadImageFile;

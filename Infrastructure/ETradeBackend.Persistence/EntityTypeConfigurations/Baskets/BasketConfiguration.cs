@@ -1,5 +1,6 @@
 ﻿using ETradeBackend.Domain.Entities;
 using ETradeBackend.Domain.Entities.Baskets;
+using ETradeBackend.Domain.Entities.Orders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

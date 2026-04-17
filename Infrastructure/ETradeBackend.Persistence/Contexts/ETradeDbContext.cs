@@ -3,6 +3,8 @@ using ETradeBackend.Domain.Entities.Baskets;
 using ETradeBackend.Domain.Entities.Common;
 using ETradeBackend.Domain.Entities.Files;
 using ETradeBackend.Domain.Entities.Identities;
+using ETradeBackend.Domain.Entities.Orders;
+using ETradeBackend.Domain.Entities.Products;
 using ETradeBackend.Persistence.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

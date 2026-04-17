@@ -1,6 +1,6 @@
 ﻿using ETradeBackend.Domain.Entities.Files;
 
-namespace ETradeBackend.Domain.Entities;
+namespace ETradeBackend.Domain.Entities.Products;
 
 public class ProductProductImageFiles
 {

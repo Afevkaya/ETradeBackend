@@ -1,4 +1,5 @@
 ﻿using ETradeBackend.Domain.Entities.Common;
+using ETradeBackend.Domain.Entities.Products;
 
 namespace ETradeBackend.Domain.Entities.Baskets;
 

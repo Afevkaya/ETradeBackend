@@ -1,4 +1,5 @@
 ﻿using ETradeBackend.Domain.Entities;
+using ETradeBackend.Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

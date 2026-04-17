@@ -1,8 +1,7 @@
 ﻿using ETradeBackend.Domain.Entities.Baskets;
 using ETradeBackend.Domain.Entities.Common;
-using ETradeBackend.Domain.Entities.Files;
 
-namespace ETradeBackend.Domain.Entities;
+namespace ETradeBackend.Domain.Entities.Products;
 
 public class Product : BaseEntity
 {
