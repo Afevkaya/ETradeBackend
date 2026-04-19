@@ -58,12 +58,29 @@ public class OrderService(IOrderWriteRepository orderWriteRepository, IOrderRead
         var data = query.Skip((page - 1) * pageSize).Take(pageSize);
         return new ListOrderResponse(totalCount, await data.Select(o => new
         {
+            Id = o.Id,
             CreatedDate = o.CreatedAt,
             OrderCode = o.Code,
             TotalPrice = o.Basket.BasketItems.Sum(bi => bi.Product.Price * bi.Quantity),
             UserName = o.Basket.User.UserName,
         }).ToListAsync());
 
+    }
+
+    public async Task<SingleOrderResponse?> GetOrderByIdAsync(Guid id)
+    {
+        var data = await orderReadRepository.Table
+            .Include(x => x.Basket)
+            .ThenInclude(b => b.BasketItems)
+            .ThenInclude(d => d.Product).FirstOrDefaultAsync(o => o.Id == id);
+        if(data == null) return null;
+        return new SingleOrderResponse(data.Id,data.Address,data.Description,data.Code,data.Basket.BasketItems.Select(bi => new
+        {
+            ProductName = bi.Product.Name,
+            Price = bi.Product.Price,
+            Quantity = bi.Quantity,
+            ItemTotalPrice = bi.Product.Price * bi.Quantity
+        }),data.Basket.BasketItems.Sum(bi => bi.Product.Price * bi.Quantity),data.CreatedAt);
     }
 
     private static string GenerateOrderCode() => Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();
