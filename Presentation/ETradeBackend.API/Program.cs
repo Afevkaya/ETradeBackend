@@ -15,9 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Host.ConfigureSeriLog();
 builder.Services
     .AddApplication()
-    // .AddStorage<LocalStorage>()
-    .AddStorage<AzureStorage>()
-    .AddInfrastructure()
+   
+    .AddInfrastructure(builder.Configuration)
     .AddPersistence(builder.Configuration)
     .AddPresentation(builder.Configuration)
     .AddSignalRServices();
