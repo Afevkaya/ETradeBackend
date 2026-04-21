@@ -8,4 +8,5 @@ public interface IOrderService
     Task CreateOrderAsync(CreateOrder order);
     Task<ListOrderResponse> GetAllOrdersAsync(int page, int pageSize);
     Task<SingleOrderResponse?> GetOrderByIdAsync(Guid id);
+    Task CompleteOrderAsync(Guid id);
 }

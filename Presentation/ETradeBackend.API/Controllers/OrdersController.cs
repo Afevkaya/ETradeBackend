@@ -1,3 +1,4 @@
+using ETradeBackend.Application.Features.Commands.CompletedOrder;
 using ETradeBackend.Application.Features.Commands.Orders.CreateOrder;
 using ETradeBackend.Application.Features.Queries.Orders.GetAllOrder;
 using ETradeBackend.Application.Features.Queries.Orders.GetByIdOrderQuery;
@@ -30,6 +31,13 @@ namespace ETradeBackend.API.Controllers
         public async Task<IActionResult> Create(CreateOrderCommandRequest request)
         {
             return Ok(await mediator.Send(request));
+        }
+
+        [HttpGet("completed-order/{guid:Id}")]
+        public async Task<IActionResult> CompletedOrder([FromRoute] CompletedOrderCommandRequest request)
+        {
+            var response = await mediator.Send(request);
+            return Ok(response);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ETradeBackend.Domain.Entities.Orders;
+﻿using ETradeBackend.Domain.Entities.CompletedOrders;
+using ETradeBackend.Domain.Entities.Orders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,6 +16,9 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .IsRequired()
             .HasMaxLength(8)
             .IsUnicode(false);
+        builder.HasOne<CompletedOrder>()
+            .WithOne(co => co.Order)
+            .HasForeignKey<CompletedOrder>(co => co.OrderId);
 
         builder.HasIndex(o => o.Code).IsUnique();
     }

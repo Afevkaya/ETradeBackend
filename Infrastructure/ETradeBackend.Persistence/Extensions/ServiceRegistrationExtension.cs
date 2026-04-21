@@ -2,6 +2,7 @@
 using ETradeBackend.Application.Abstractions.Services.Authentications;
 using ETradeBackend.Application.Repositories.BasketItems;
 using ETradeBackend.Application.Repositories.Baskets;
+using ETradeBackend.Application.Repositories.CompletedOrders;
 using ETradeBackend.Application.Repositories.Files;
 using ETradeBackend.Application.Repositories.InvoiceFiles;
 using ETradeBackend.Application.Repositories.Orders;
@@ -11,6 +12,7 @@ using ETradeBackend.Domain.Entities.Identities;
 using ETradeBackend.Persistence.Contexts;
 using ETradeBackend.Persistence.Repositories.BasketItems;
 using ETradeBackend.Persistence.Repositories.Baskets;
+using ETradeBackend.Persistence.Repositories.CompletedOrders;
 using ETradeBackend.Persistence.Repositories.Files;
 using ETradeBackend.Persistence.Repositories.InvoiceFiles;
 using ETradeBackend.Persistence.Repositories.Orders;
@@ -61,6 +63,9 @@ public static class ServiceRegistrationExtension
         services.AddScoped<IBasketWriteRepository,BasketWriteRepository>();
         services.AddScoped<IBasketItemReadRepository, BasketItemReadRepository>();
         services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
+        
+        services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
+        services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();

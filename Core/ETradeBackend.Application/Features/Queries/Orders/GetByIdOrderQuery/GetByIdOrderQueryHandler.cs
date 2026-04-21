@@ -8,6 +8,9 @@ public class GetByIdOrderQueryHandler(IOrderService orderService) : IRequestHand
     public async Task<GetByIdOrderQueryResponse> Handle(GetByIdOrderQueryRequest request, CancellationToken cancellationToken)
     {
         var order = await orderService.GetOrderByIdAsync(request.Id);
-        return order is null ? throw new Exception("Sipariş bulunamadı") : new GetByIdOrderQueryResponse(order.Id, order.Address, order.Description, order.OrderCode, order.OrderItems, order.BasketTotalPrice, order.CreatedDate);
+        return order is null 
+            ? throw new Exception("Sipariş bulunamadı") 
+            : new GetByIdOrderQueryResponse
+                (order.Id, order.Address, order.Description, order.OrderCode, order.OrderItems, order.BasketTotalPrice, order.CreatedDate,order.Completed);
     }
 }

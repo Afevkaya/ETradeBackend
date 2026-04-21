@@ -1,5 +1,6 @@
 ﻿using ETradeBackend.Domain.Entities.Baskets;
 using ETradeBackend.Domain.Entities.Common;
+using ETradeBackend.Domain.Entities.CompletedOrders;
 
 namespace ETradeBackend.Domain.Entities.Orders;
 
@@ -10,5 +11,5 @@ public class Order : BaseEntity
     public Basket Basket { get; set; }
 
     public string Code { get; set; }
-    // public ICollection<Product> Products { get; set; }
+    public CompletedOrder CompletedOrder { get; set; }
 }
