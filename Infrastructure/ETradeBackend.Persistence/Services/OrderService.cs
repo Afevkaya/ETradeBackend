@@ -121,15 +121,18 @@ public class OrderService(
             result.Basket.BasketItems.Sum(bi => bi.Product.Price * bi.Quantity),result.CreatedDate,result.Complated);
     }
 
-    public async Task CompleteOrderAsync(Guid id)
+    public async Task<(bool, CompletedOrderResponse?)> CompleteOrderAsync(Guid id)
     {
-        var order = await orderReadRepository.GetByIdAsync(id);
-        if (order == null) return;
+        var order = await orderReadRepository.Table.Include(x => x.Basket)
+            .ThenInclude(c => c.User)
+            .FirstOrDefaultAsync(o => o.Id == id);
+        if (order == null) return (false, null);
         await completedOrderWriteRepository.AddAsync(new CompletedOrder
         {
             OrderId = order.Id
         });
         await completedOrderWriteRepository.SaveChangesAsync();
+        return (true, new CompletedOrderResponse(order.Code, order.CreatedAt, order.Basket.User.NameSurname, order.Basket.User.Email));
     }
 
     private static string GenerateOrderCode() => Guid.NewGuid().ToString("N")[..8].ToUpperInvariant();

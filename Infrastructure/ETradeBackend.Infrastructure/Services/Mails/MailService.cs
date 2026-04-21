@@ -46,4 +46,12 @@ public class MailService(IOptions<EmailSettings> emailSettings) : IMailService
 
         await SendMailAsync(to, "Şifre Yenileme Talebi", builder.ToString());
     }
+
+    public async Task SendCompletedOrderMailAsync(string to, string orderCode, DateTime orderDate, string nameSurname)
+    {
+        var mail = $"Sayın {nameSurname} Merhaba <br> {orderDate} tarihinde vermiş olduğunuz {orderCode} kodulu"
+                     + " siparişiniz başarıyla tamamlanmıştır. <br> Siparişinizle ilgili detayları hesabınızdan inceleyebilirsiniz. <br><br>"
+                     + "ETrade Backend Ekibi";
+        await SendMailAsync(to, "Siparişiniz Tamamlandı", mail);
+    }
 }
