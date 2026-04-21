@@ -1,6 +1,7 @@
 ﻿using ETradeBackend.Application.Abstractions.Services;
 using ETradeBackend.Application.DTOs.Users;
 using ETradeBackend.Application.Exceptions;
+using ETradeBackend.Application.Helpers;
 using ETradeBackend.Domain.Entities.Identities;
 using Microsoft.AspNetCore.Identity;
 
@@ -35,5 +36,16 @@ public class UserService(UserManager<AppUser> userManager) : IUserService
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiration = accessTokenExpiration.AddSeconds(addOnAccessTokenDate);
         await userManager.UpdateAsync(user);
+    }
+
+    public async Task UpdatePasswordAsync(Guid userId, string resetToken, string newPassword)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+        if (user == null) throw new UserNotFoundException();
+        resetToken = resetToken.UrlDecode();
+        var result = await userManager.ResetPasswordAsync(user, resetToken, newPassword);
+        if (result.Succeeded) await userManager.UpdateSecurityStampAsync(user);
+        else throw new PasswordChangeFailedException();
+
     }
 }

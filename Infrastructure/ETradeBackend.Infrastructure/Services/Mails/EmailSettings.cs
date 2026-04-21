@@ -8,4 +8,5 @@ public class EmailSettings
     public string Password { get; set; } = default!;
     public string FromEmail { get; set; } = default!;
     public string FromName { get; set; } = default!;
+    public string ResetPasswordBaseUrl { get; set; } = default!;
 }

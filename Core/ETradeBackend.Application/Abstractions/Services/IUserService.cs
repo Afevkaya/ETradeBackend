@@ -7,4 +7,5 @@ public interface IUserService
 {
     Task<CreateUserResponse> CreateAsync(CreateUser user);
     Task UpdateRefreshTokenAsync(string refreshToken, AppUser user, DateTime accessTokenExpiration, int addOnAccessTokenDate);
+    Task UpdatePasswordAsync(Guid userId, string resetToken, string newPassword);
 }

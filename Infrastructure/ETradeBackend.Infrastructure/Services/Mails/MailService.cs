@@ -10,12 +10,12 @@ public class MailService(IOptions<EmailSettings> emailSettings) : IMailService
 {
     private readonly EmailSettings _emailSettings = emailSettings.Value;
 
-    public async Task SenMessageAsync(string to, string subject, string body, bool isBodyHtml = true)
+    public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
     {
-        await SenMessageAsync([to], subject, body, isBodyHtml);
+        await SendMailAsync([to], subject, body, isBodyHtml);
     }
 
-    public async Task SenMessageAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
+    public async Task SendMailAsync(string[] tos, string subject, string body, bool isBodyHtml = true)
     {
         var mailMessage = new MailMessage();
         mailMessage.IsBodyHtml = isBodyHtml;
@@ -31,5 +31,19 @@ public class MailService(IOptions<EmailSettings> emailSettings) : IMailService
         smtp.Host = _emailSettings.Host;
         smtp.Port = _emailSettings.Port;
         await smtp.SendMailAsync(mailMessage);
+    }
+
+    public async Task SendResetPasswordMailAsync(string to, Guid userId, string resetToken)
+    {
+        var resetUrl = $"{_emailSettings.ResetPasswordBaseUrl}?userId={Uri.EscapeDataString(userId.ToString())}&token={Uri.EscapeDataString(resetToken)}";
+
+        var builder = new StringBuilder();
+        builder.AppendLine("Merhaba<br>");
+        builder.AppendLine("Eğer yeni bir şifre talebinde bulunduysanız aşağıdaki linke tıklayarak şifrenizi sıfırlayabilirsiniz.<br>");
+        builder.AppendLine($"<strong><a target=\"_blank\" href=\"{resetUrl}\">Şifre Sıfırlama Linki</a></strong><br><br>");
+        builder.AppendLine("Eğer bu talebi siz yapmadıysanız, lütfen bu e-postayı görmezden gelin.<br><br>");
+        builder.AppendLine("İyi günler dileriz.");
+
+        await SendMailAsync(to, "Şifre Yenileme Talebi", builder.ToString());
     }
 }

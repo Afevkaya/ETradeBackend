@@ -17,6 +17,7 @@ using ETradeBackend.Persistence.Repositories.Orders;
 using ETradeBackend.Persistence.Repositories.ProductImageFiles;
 using ETradeBackend.Persistence.Repositories.Products;
 using ETradeBackend.Persistence.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +39,8 @@ public static class ServiceRegistrationExtension
             options.Password.RequireDigit = false;
             options.Password.RequireUppercase = false;
             options.Password.RequireLowercase = false;
-        }).AddEntityFrameworkStores<ETradeDbContext>();
+        }).AddEntityFrameworkStores<ETradeDbContext>()
+        .AddDefaultTokenProviders();
 
         services.AddScoped<IOrderReadRepository, OrderReadRepository>();
         services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();

@@ -3,9 +3,11 @@ using ETradeBackend.Application.Abstractions.Tokens;
 using ETradeBackend.Application.DTOs;
 using ETradeBackend.Application.DTOs.Tokens;
 using ETradeBackend.Application.Exceptions;
+using ETradeBackend.Application.Helpers;
 using ETradeBackend.Domain.Entities.Identities;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -16,6 +18,7 @@ public class AuthService(
     SignInManager<AppUser> signInManager,
     IUserService userService,
     ITokenHandler tokenHandler,
+    IMailService mailService,
     IConfiguration configuration) : IAuthService
 {
     public async Task<Token> LoginAsync(string usernameOrEmail, string password)
@@ -82,5 +85,27 @@ public class AuthService(
         var token = tokenHandler.CreateAccessToken(user);
         await userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 300);
         return token;
+    }
+
+    public async Task ResetPasswordAsync(string email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+        if (user == null) throw new UserNotFoundException();
+        var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+        // var tokenBytes = System.Text.Encoding.UTF8.GetBytes(resetToken);
+        // resetToken = WebEncoders.Base64UrlEncode(tokenBytes);
+        resetToken = resetToken.UrlEncode();
+        await mailService.SendResetPasswordMailAsync(email, user.Id, resetToken);
+    }
+
+    public async Task<bool> VerifyResetPasswordTokenAsync(Guid userId, string resetToken)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null) throw new UserNotFoundException();
+        // var tokenBytes = WebEncoders.Base64UrlDecode(token);
+        // var decodedToken = System.Text.Encoding.UTF8.GetString(tokenBytes);
+        resetToken = resetToken.UrlDecode();
+        await userManager.VerifyUserTokenAsync(user, userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken);
+        return true;
     }
 }
