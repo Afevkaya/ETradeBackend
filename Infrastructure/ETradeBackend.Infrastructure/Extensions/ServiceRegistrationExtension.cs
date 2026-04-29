@@ -1,7 +1,9 @@
 ﻿using ETradeBackend.Application.Abstractions.Services;
+using ETradeBackend.Application.Abstractions.Services.Configurations;
 using ETradeBackend.Application.Abstractions.Storages;
 using ETradeBackend.Application.Abstractions.Tokens;
 using ETradeBackend.Infrastructure.Enums;
+using ETradeBackend.Infrastructure.Services.Configurations;
 using ETradeBackend.Infrastructure.Services.Mails;
 using ETradeBackend.Infrastructure.Services.Storages;
 using ETradeBackend.Infrastructure.Services.Storages.Azure;
@@ -18,6 +20,7 @@ public static class ServiceRegistrationExtension
     {
         services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<ITokenHandler, TokenHandler>();
+        services.AddScoped<IApplicationService, ApplicationService>();
             // .AddStorage<LocalStorage>()
         services.AddStorage<AzureStorage>();
         services.AddMailService(configuration);
